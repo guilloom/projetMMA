@@ -14,8 +14,92 @@ class User
     private int|null $id = null;
     #[ORM\Column(type: 'string')]
     private string $name;
+    #[ORM\Column(type: 'string')]
+    private string $surname;
     #[ORM\Column(type: 'integer')]
     private int $age;
-    #[ORM\Column(type: 'blob')]
+    #[ORM\Column(type: 'string')]
     private string $avatar;
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param string $name
+     *
+     * @return User
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set age.
+     *
+     * @param int $age
+     *
+     * @return User
+     */
+    public function setAge($age)
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    /**
+     * Get age.
+     *
+     * @return int
+     */
+    public function getAge()
+    {
+        return $this->age;
+    }
+
+    /**
+     * Set avatar.
+     *
+     * @param string $avatar
+     *
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar.
+     *
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return base64_encode($this->avatar);
+    }
 }

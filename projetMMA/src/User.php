@@ -1,5 +1,5 @@
 <?php
-// src/Combattants.php
+// src/user.php
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -14,6 +14,8 @@ class User
     private int|null $id = null;
     #[ORM\Column(type: 'string')]
     private string $name;
+    #[ORM\Column(type: 'string')]
+    private string $surname;
     #[ORM\Column(type: 'integer')]
     private int $age;
     #[ORM\Column(type: 'string')]
@@ -99,5 +101,29 @@ class User
     public function getAvatar()
     {
         return base64_encode($this->avatar);
+    }
+
+    /**
+     * Set surname.
+     *
+     * @param string $surname
+     *
+     * @return User
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    /**
+     * Get surname.
+     *
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
     }
 }

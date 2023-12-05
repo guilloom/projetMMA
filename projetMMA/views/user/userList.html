@@ -4,19 +4,25 @@
 <table id="table" class="display" border = 34>
     <thead>
         <tr>
-            <th>id</th>
+        <th>id</th>
 		<th>nom</th>
+        <th>prénom</th>
 		<th>age</th>
 		<th>Avatar</th>
+        <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for user in users %}
         <tr>
             <td>{{ user.id }}</td>
-            <td>{{ user.nom }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.surname }}</td>
             <td>{{ user.age }}</td>
             <td><img width="100" src="data:image/png;base64, {{ user.avatar }}"/></td>
+            <td> <a href="">Voir</a>
+                <a href="">Modifier</a>
+                <a href="">Supprimer</td>
         </tr>
     {% endfor %}
     <script>

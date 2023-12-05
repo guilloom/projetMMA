@@ -97,6 +97,6 @@ class Image
      */
     public function getAvatar()
     {
-        return $this->avatar;
+        return base64_encode($this->avatar);
     }
 }

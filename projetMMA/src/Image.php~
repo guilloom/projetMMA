@@ -75,4 +75,28 @@ class Image
     {
         return $this->nom;
     }
+
+    /**
+     * Set avatar.
+     *
+     * @param string|null $avatar
+     *
+     * @return Image
+     */
+    public function setAvatar($avatar = null)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar.
+     *
+     * @return string|null
+     */
+    public function getAvatar()
+    {
+        return base64_encode($this->avatar);
+    }
 }

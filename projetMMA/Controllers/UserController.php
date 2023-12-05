@@ -38,18 +38,23 @@ class UserController extends Controller {
 
     public function create()
     {
-        echo $this->twig->render('create.html');
+        echo $this->twig->render('/user/create.html');
     }
 
     public function insert($params) {
 
         $em = $params['em'];
-        $nom =($_POST['nom']);
-        $prenom =($_POST['prenom']);
+        $name =($_POST['name']);
+        $surname =($_POST['surname']);
+        $age =($_POST['age']);
+        //var_dump($_POST);die;
+        $avatar=file_get_contents($_FILES['avatar']['tmp_name']);
 
         $newUser = new User();
-        $newUser->setNom($nom);
-        $newUser->setPrenom($prenom);
+        $newUser->setName($name);
+        $newUser->setSurname($surname);
+        $newUser->setAge($age);
+        $newUser->setAvatar($avatar);
 
         $em->persist($newUser);
         $em->flush();
@@ -57,8 +62,12 @@ class UserController extends Controller {
         header('Location: start.php?c=user&t=userList');
     }
 
+    public function read($params) {
+
+    }
+
     public function edit($params) {
-        //if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
         $id = $params['get']['id'];
         $em = $params["em"];
         $user = $em->find('User', $id);
@@ -72,8 +81,10 @@ class UserController extends Controller {
         $user = $em->find('User', $id);
 
         //var_dump($params['post']);die;
-        $user->setNom = $params['post']['nom'];
-        $user->setPrenom =$params['post']['prenom'];
+        $user->setName = $params['post']['name'];
+        $user->setSurname =$params['post']['surname'];
+        $user->setAge = $params['post']['age'];
+        $user->setAvatar = $params['post']['avatar'];
 
 
 

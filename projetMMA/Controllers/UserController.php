@@ -73,6 +73,7 @@ class UserController extends Controller {
         $user = $em->find('User', $id);
         echo $this->twig->render('edit.html', ['user' => $user]);
 
+        header('Location: start.php?c=user&t=edit');
     }
 
     public function update($params) {

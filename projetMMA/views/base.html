@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMA website</title>
+    <link href="/style.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+
+        <div class="website-title">
+            <p>MMA NEWS</p>
+        </div>
+
+        <div class="header">
+
+            {% block content %}
+            <div class="fighters">
+                <a href="">Combattants français</a>
+            </div>
+            {% endblock %}
+
+	    {% block body %}
+		{% endblock %}
+            <div class="shop">
+                <a href=""></a>
+            </div>
+            <div class="login-link">
+                <a href="login.html">Se connecter</a>/<a href="enregistrement.html">S'enregistrer</a>
+            </div>
+
+        </div>
+    </header>
+</body>
+</html>

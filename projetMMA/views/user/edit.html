@@ -9,18 +9,21 @@
     <h1>
         Enregistrement de l'utilisateur
     </h1>
-    <form action="?c=user&t=update" method="post" enctype="multipart/form-data">
+    <form action="{{url}}?c=user&t=update&id={{ user.id }}" method="post" enctype="multipart/form-data">
         <label for="nom">Nom :</label>
-        <input type="text" id="name" name="name" required><br>
+
+        <input type="hidden" id="name" name="name" value="{{ user.id }}"><br>
+
+        <input type="text" id="name" name="name" value="{{ user.name }}"><br>
 
         <label for="prenom">Prénom :</label>
-        <input type="text" id="surname" name="surname" required><br>
+        <input type="text" id="surname" name="surname" value="{{ user.surname }}"><br>
 
         <label for="age">Age :</label>
-        <input id="age" name="age" required><br>
+        <input id="age" name="age" value="{{ user.age }}"><br>
 
         <label for="avatar">Avatar :</label>
-        <input type="file" id="avatar" name="avatar" required><br>
+        <input type="file" id="avatar" name="avatar" value="{{ user.avatar }}"><br>
 
         <input type="submit" value="Envoyer">
     </form>

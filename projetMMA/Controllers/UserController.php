@@ -33,7 +33,7 @@ class UserController extends Controller {
         $userRepository = $entityManager->getRepository('User');
         $users = $userRepository->findAll();
 
-        echo $this->twig->render('user/userList.html', ['users' => $users]);
+        echo $this->twig->render('user/userList.html', ['users' => $users, 'url' => $params['url']]);
     }
 
     public function create()
@@ -67,31 +67,32 @@ class UserController extends Controller {
     }
 
     public function edit($params) {
-
         $id = $params['get']['id'];
         $em = $params["em"];
         $user = $em->find('User', $id);
-        echo $this->twig->render('edit.html', ['user' => $user]);
 
-        header('Location: start.php?c=user&t=edit');
+        echo $this->twig->render('/user/edit.html', ['user' => $user]);
     }
 
+
     public function update($params) {
-        $id = $params['get']['id'];
+        // Récupérez l'ID de l'utilisateur depuis les paramètres POST ou GET
+        $id = $params['post']['id'] ?? $params['get']['id'];
+
         $em = $params['em'];
         $user = $em->find('User', $id);
 
-        //var_dump($params['post']);die;
-        $user->setName = $params['post']['name'];
-        $user->setSurname =$params['post']['surname'];
-        $user->setAge = $params['post']['age'];
-        $user->setAvatar = $params['post']['avatar'];
+        // Mettez à jour les propriétés de l'utilisateur avec les valeurs du formulaire
+        $user->setName($params['post']['name']);
+        $user->setSurname($params['post']['surname']);
+        $user->setAge($params['post']['age']);
 
-
+        // Gérez le téléchargement du nouvel avatar ici, si nécessaire
 
         $em->flush();
-        $this->userList();
-        //echo $this->twig->render('edit.html', ['user' => $user]);
+
+        // Redirigez l'utilisateur vers la liste des utilisateurs
+        header('Location: start.php?c=user&t=userList');
     }
 }
 ?>

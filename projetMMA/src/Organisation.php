@@ -5,8 +5,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'users')]
-class User
+#[ORM\Table(name: 'organisations')]
+class Organisation
 {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -15,13 +15,13 @@ class User
     #[ORM\Column(type: 'string')]
     private string $name;
     #[ORM\Column(type: 'string')]
-    private string $surname;
+    private string $country;
+    #[ORM\Column(type: 'string')]
+    private string $founder;
     #[ORM\Column(type: 'integer')]
-    private int $age;
+    private int $roster;
     #[ORM\Column(type: 'string')]
-    private string $avatar;
-    #[ORM\Column(type: 'string')]
-    private string $password;
+    private string $logo;
 
     /**
      * Get id.
@@ -38,7 +38,7 @@ class User
      *
      * @param string $name
      *
-     * @return User
+     * @return Organisation
      */
     public function setName($name)
     {
@@ -58,98 +58,98 @@ class User
     }
 
     /**
-     * Set age.
+     * Set country.
      *
-     * @param int $age
+     * @param string $country
      *
-     * @return User
+     * @return Organisation
      */
-    public function setAge($age)
+    public function setCountry($country)
     {
-        $this->age = $age;
+        $this->country = $country;
 
         return $this;
     }
 
     /**
-     * Get age.
+     * Get country.
+     *
+     * @return string
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * Set founder.
+     *
+     * @param string $founder
+     *
+     * @return Organisation
+     */
+    public function setFounder($founder)
+    {
+        $this->founder = $founder;
+
+        return $this;
+    }
+
+    /**
+     * Get founder.
+     *
+     * @return string
+     */
+    public function getFounder()
+    {
+        return $this->founder;
+    }
+
+    /**
+     * Set roster.
+     *
+     * @param int $roster
+     *
+     * @return Organisation
+     */
+    public function setRoster($roster)
+    {
+        $this->roster = $roster;
+
+        return $this;
+    }
+
+    /**
+     * Get roster.
      *
      * @return int
      */
-    public function getAge()
+    public function getRoster()
     {
-        return $this->age;
+        return $this->roster;
     }
 
     /**
-     * Set avatar.
+     * Set logo.
      *
-     * @param string $avatar
+     * @param string $logo
      *
-     * @return User
+     * @return Organisation
      */
-    public function setAvatar($avatar)
+    public function setLogo($logo)
     {
-        $this->avatar = $avatar;
+        $this->logo = $logo;
 
         return $this;
     }
 
     /**
-     * Get avatar.
+     * Get logo.
      *
      * @return string
      */
-    public function getAvatar()
+    public function getLogo()
     {
-        return base64_encode($this->avatar);
-    }
-
-    /**
-     * Set surname.
-     *
-     * @param string $surname
-     *
-     * @return User
-     */
-    public function setSurname($surname)
-    {
-        $this->surname = $surname;
-
-        return $this;
-    }
-
-    /**
-     * Get surname.
-     *
-     * @return string
-     */
-    public function getSurname()
-    {
-        return $this->surname;
-    }
-
-    /**
-     * Set password.
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password.
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
+        return $this->logo;
     }
 }

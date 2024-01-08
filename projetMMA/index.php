@@ -44,4 +44,5 @@ switch($page) {
             $userId = $_GET['userId'] ?? null;
             $userController->showUser(['em' => $entityManager, 'userId' => $userId]);
             break;
+
     }

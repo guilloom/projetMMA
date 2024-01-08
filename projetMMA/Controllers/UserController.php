@@ -8,18 +8,18 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class UserController extends Controller {
 
-        public function one($params)
+        public function showUser($params)
         {
             $entityManager = $params["em"];
             $connectUser = "Un seul";
 
             $user = new User();
 
-            $user -> setNom("LINEATTE");
+            //$user -> setNom("LINEATTE");
 
-            $user -> setPrenom("Guillaume");
+            //$user -> setPrenom("Guillaume");
 
-            $user -> setAvatar();
+            $user -> setAvatar($user);
             //var_dump($user);die;
             $entityManager -> persist($user);
 
@@ -38,28 +38,35 @@ class UserController extends Controller {
 
     public function create()
     {
-        echo $this->twig->render('/user/create.html');
+        echo $this->twig->render('user/create.html');
     }
 
     public function insert($params) {
+        if (
+            isset($_POST['name']) &&
+            isset($_POST['surname']) &&
+            isset($_POST['age']) &&
+            isset($_FILES['avatar'])
+        ) {
+            $em = $params['em'];
+            $name = $_POST['name'];
+            $surname = $_POST['surname'];
+            $age = $_POST['age'];
+            $avatar = file_get_contents($_FILES['avatar']['tmp_name']);
+            $password = $_POST['password'];
 
-        $em = $params['em'];
-        $name =($_POST['name']);
-        $surname =($_POST['surname']);
-        $age =($_POST['age']);
-        //var_dump($_POST);die;
-        $avatar=file_get_contents($_FILES['avatar']['tmp_name']);
+            $newUser = new User();
+            $newUser->setName($name);
+            $newUser->setSurname($surname);
+            $newUser->setAge($age);
+            $newUser->setAvatar($avatar);
+            $newUser->setPassword($password);
 
-        $newUser = new User();
-        $newUser->setName($name);
-        $newUser->setSurname($surname);
-        $newUser->setAge($age);
-        $newUser->setAvatar($avatar);
+            $em->persist($newUser);
+            $em->flush();
 
-        $em->persist($newUser);
-        $em->flush();
-
-        header('Location: start.php?c=user&t=userList');
+            header('Location: start.php?c=user&t=userList');
+        }
     }
 
     public function read($params) {
@@ -71,28 +78,56 @@ class UserController extends Controller {
         $em = $params["em"];
         $user = $em->find('User', $id);
 
-        echo $this->twig->render('/user/edit.html', ['user' => $user]);
+        echo $this->twig->render('user/edit.html', ['user' => $user]);
     }
 
 
     public function update($params) {
-        // Récupérez l'ID de l'utilisateur depuis les paramètres POST ou GET
         $id = $params['post']['id'] ?? $params['get']['id'];
 
         $em = $params['em'];
         $user = $em->find('User', $id);
 
-        // Mettez à jour les propriétés de l'utilisateur avec les valeurs du formulaire
         $user->setName($params['post']['name']);
         $user->setSurname($params['post']['surname']);
         $user->setAge($params['post']['age']);
 
-        // Gérez le téléchargement du nouvel avatar ici, si nécessaire
-
         $em->flush();
 
-        // Redirigez l'utilisateur vers la liste des utilisateurs
         header('Location: start.php?c=user&t=userList');
     }
+
+    //public function delete($params) {}
+
+    public function login($params) {
+        $em = $params['em'];
+
+        echo $this->twig->render('/login.html');
+    }
+
+    public function check($params) {
+        $em = $params['em'];
+        $name = $_POST['name'];
+        $password = $_POST['password'];
+
+        $qb=$em->createQueryBuilder();
+        $qb->select('u')
+            ->from('User', 'u')
+            ->where('u.name = :name')
+            ->setParameter('name', $name);
+        $query = $qb->getQuery();
+        $users = $query->getResult();
+        //$user = $users[0];
+
+        if ($users) {
+            $user = $users[0];
+            echo "Connexion réussie !";
+            echo $user->getPassword();
+
+            echo $this->twig->render('user/userList.html',
+            ['users' => $users, 'url' => $params['url']]);
+        } else {
+            echo $this->twig->render('user/create.html');
+        }
+    }
 }
-?>

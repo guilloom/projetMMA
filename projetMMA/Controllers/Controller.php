@@ -28,4 +28,8 @@ class Controller {
             'plop'
         );
     }
+
+    public function base($params) {
+        echo $this->twig->render('base.html', ['params' => $params]);
+    }
 }

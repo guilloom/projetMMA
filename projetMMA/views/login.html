@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
-    <link href="../style.css" rel="stylesheet">
+    <title>Document</title>
 </head>
 <body>
-    <h2>Formulaire de Connexion</h2>
-    <form action="userController.php" method="post">
-        <label for="username">Nom d'utilisateur:</label>
-        <input type="text" id="username" name="username" required></br>
-        
-        <label for="password">Mot de passe:</label>
-        <input type="password" id="password" name="password" required></br>
-        
-        <input type="submit" value="Se connecter">
+
+
+    <h1>S'authentifier</h1>
+    <form method="post" action="{{ url }}?c=user&t=check">
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <input type="submit" value="Connexion">
+
+        <p>
+            Pas encore de compte ? <a href="{{ url }}?c=user&t=create">S'inscrire</a>
+        </p>
     </form>
+
+
 </body>
 </html>

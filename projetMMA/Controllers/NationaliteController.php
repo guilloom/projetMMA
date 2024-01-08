@@ -3,10 +3,10 @@
 namespace Controllers;
 
 //use Symfony\Component\Routing\Annotation\Route;
-use User;
+use Nationalite;
 use Doctrine\ORM\Query\ResultSetMapping;
 
-class UserController extends Controller {
+class NationaliteController extends Controller {
 
     public function create()
     {

@@ -32,4 +32,14 @@ class Controller {
     public function base($params) {
         echo $this->twig->render('base.html', ['params' => $params]);
     }
+
+    protected function hasSpecificEmail() {
+        $allowedEmail = 'gibbale@gmail.com';
+
+        return isset($_SESSION['user_email']) && $_SESSION['user_email'] === $allowedEmail;
+    }
+
+    protected function isLoggedIn() {
+        return isset($_SESSION['user_id']);
+    }
 }

@@ -8,6 +8,51 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class UserController extends Controller {
 
+    public function signin()
+    {
+        header('Location: start.php?c=user&t=create');
+    }
+
+    public function login() {
+
+        echo $this->twig->render('login.html');
+    }
+
+    public function checkLogin($params) {
+        $em = $params['em'];
+        $name = ($_POST['name']);
+        $password = ($_POST['password']);
+
+        $qb=$em->createQueryBuilder();
+        $qb->select('u')
+            ->from('User', 'u')
+            ->where('u.name = :name1')
+            ->andWhere('u.password = :password')
+            ->setParameter('name1', $name)
+            ->setParameter('password', $password);
+
+        //echo $qb->getQuery()->getSQL();die;
+        $query = $qb->getQuery();
+        $user = $query->getOneOrNullResult();
+
+        if ($user) {
+            $_SESSION['user_id'] = $user->getId();
+            $_SESSION['user_name'] = $user->getName();
+            $_SESSION['user_password'] = $user->getPassword();
+
+            header('Location: start.php?c=user&t=admindisplay');
+        } else {
+            echo $this->twig->render('login.html',['error' => 'Identifiants invalides']);
+        }
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        header('Location: start.php?c=user&t=login');
+        exit();
+    }
+
         public function showUser($params)
         {
             $entityManager = $params["em"];
@@ -28,46 +73,47 @@ class UserController extends Controller {
             echo $this->twig->render('user/user.html', ['connectUser' => $connectUser, 'params' => $params]);
         }
 
-    public function userList($params) {
-        $entityManager = $params["em"];
-        $userRepository = $entityManager->getRepository('User');
-        $users = $userRepository->findAll();
+        public function userList($params) {
+            if ($this->isLoggedIn()) {
+                $entityManager = $params["em"];
+                $userRepository = $entityManager->getRepository('User');
+                $users = $userRepository->findAll();
 
-        echo $this->twig->render('user/userList.html', ['users' => $users, 'url' => $params['url']]);
-    }
 
-    public function create()
+                    echo $this->twig->render('user/userList.html', ['users' => $users, 'params' => $params]);
+            } else {
+                header('Location: start.php?c=user&t=login');
+                exit();
+            }
+        }
+
+        public function create()
     {
         echo $this->twig->render('user/create.html');
     }
 
     public function insert($params) {
-        if (
-            isset($_POST['name']) &&
-            isset($_POST['surname']) &&
-            isset($_POST['age']) &&
-            isset($_FILES['avatar'])
-        ) {
+
             $em = $params['em'];
             $name = $_POST['name'];
             $surname = $_POST['surname'];
             $age = $_POST['age'];
-            $avatar = file_get_contents($_FILES['avatar']['tmp_name']);
+            //$avatar = file_get_contents($_FILES['avatar']['tmp_name']);
             $password = $_POST['password'];
 
             $newUser = new User();
+
             $newUser->setName($name);
             $newUser->setSurname($surname);
             $newUser->setAge($age);
-            $newUser->setAvatar($avatar);
+            //$newUser->setAvatar($avatar);
             $newUser->setPassword($password);
 
             $em->persist($newUser);
             $em->flush();
 
-            header('Location: start.php?c=user&t=userList');
+            header('Location: start.php?c=user&t=login');
         }
-    }
 
     public function read($params) {
 
@@ -76,9 +122,9 @@ class UserController extends Controller {
     public function edit($params) {
         $id = $params['get']['id'];
         $em = $params["em"];
-        $user = $em->find('User', $id);
+        $users = $em->find('User', $id);
 
-        echo $this->twig->render('user/edit.html', ['user' => $user]);
+        echo $this->twig->render('user/edit.html', ['users' => $users]);
     }
 
 
@@ -94,40 +140,34 @@ class UserController extends Controller {
 
         $em->flush();
 
-        header('Location: start.php?c=user&t=userList');
+        header('Location: start.php?c=user&t=login');
     }
 
-    //public function delete($params) {}
+    public function delete($params) {
+        $id=($params['get']['id']);
+        $em=$params['em'];
+        $user=$em->find('User',$id);
 
-    public function login($params) {
-        $em = $params['em'];
+        $em->remove($user);
+        $em->flush();
 
-        echo $this->twig->render('/login.html');
-    }
-
-    public function check($params) {
-        $em = $params['em'];
-        $name = $_POST['name'];
-        $password = $_POST['password'];
-
-        $qb=$em->createQueryBuilder();
-        $qb->select('u')
-            ->from('User', 'u')
-            ->where('u.name = :name')
-            ->setParameter('name', $name);
-        $query = $qb->getQuery();
-        $users = $query->getResult();
-        //$user = $users[0];
-
-        if ($users) {
-            $user = $users[0];
-            echo "Connexion réussie !";
-            echo $user->getPassword();
-
-            echo $this->twig->render('user/userList.html',
-            ['users' => $users, 'url' => $params['url']]);
+        if ($this->isLoggedIn()) {
+            header('Location: start.php?c=user&t=userList');
         } else {
-            echo $this->twig->render('user/create.html');
+            header('Location: start.php?c=user&t=login');
+        }
+    }
+
+    public function admindisplay($params) {
+
+        if ($this->isLoggedIn()) {
+            $user_id = $_SESSION['user_id'];
+            $user_name = $_SESSION['user_name'];
+
+            echo $this->twig->render('base.html', ['user_id' => $user_id,'user_name' => $user_name]);
+
+        } else {
+            header('Location: start.php?c=user&t=login');
         }
     }
 }

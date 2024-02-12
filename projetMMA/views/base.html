@@ -4,12 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMA website</title>
+    <title>{% block title %}MMA Website{% endblock %}</title>
     <link href="/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://195.154.118.169/guillaume/projetMMA/views/base.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 </head>
+
 <body>
     {% block body  %}
 
+    <a href="{{url}}start.php?c=user&t=logout" class="logout-btn">Déconnexion</a>
+    <header class="header-basepage">
+        <img src="http://195.154.118.169/guillaume/projetMMA/views/logoMMA.jpg" alt="LogoMMA" class="logo_mma" />
+        <h1>Bonjour {{ user_name }} !</h1>
+    </header>
+
+    <div class="table-container">
+        <div class="user-card">
+            <a href="{{url}}?c=user&t=userList" class="card-link">Utilisateurs</a>
+        </div>
+        <div class="fighter-card">
+            <a href="{{url}}?c=combattant&t=combattantList" class="card-link">Combattants</a>
+        </div>
+        <div class="organisation-card">
+            <a href="{{url}}?c=organisation&t=organisationList" class="card-link">Organisations</a>
+        </div>
+        <div class="arena-card">
+            <a href="{{url}}?c=arena&t=arenaList" class="card-link">Arènes</a>
+        </div>
+    </div>
+
 	{% endblock %}
+
 </body>
 </html>

@@ -12,7 +12,7 @@ class CombattantController extends Controller {
         $combattantRepository = $entityManager->getRepository('Combattant');
         $combattants = $combattantRepository->findAll();
 
-        echo $this->twig->render('arena/arenaList.html', ['combattant' => $combattants, 'url' => $params['url']]);
+        echo $this->twig->render('combattant/combattantList.html', ['combattants' => $combattants, 'url' => $params['url']]);
     }
 
     public function create()
@@ -21,20 +21,6 @@ class CombattantController extends Controller {
     }
 
     public function insert($params) {
-        if (
-            isset($_POST['name']) &&
-            isset($_POST['surname']) &&
-            isset($_POST['pseudo']) &&
-            isset($_POST['age']) &&
-            isset($_POST['poids']) &&
-            isset($_POST['taille']) &&
-            isset($_POST['allonge']) &&
-            isset($_FILES['photo']) &&
-            isset($_POST['victoire']) &&
-            isset($_POST['defaite']) &&
-            isset($_POST['egalite']) &&
-            isset($_POST['nationalite'])
-        ) {
             $em = $params['em'];
             $name = $_POST['name'];
             $surname = $_POST['surname'];
@@ -68,7 +54,6 @@ class CombattantController extends Controller {
 
             header('Location: start.php?c=combattant&t=combattantList');
         }
-    }
 
     public function read($params) {
 
@@ -79,7 +64,7 @@ class CombattantController extends Controller {
         $em = $params["em"];
         $combattants = $em->find('Combattant', $id);
 
-        echo $this->twig->render('combattant/edit.html', ['combattant' => $combattants]);
+        echo $this->twig->render('combattant/edit.html', ['combattants' => $combattants]);
     }
 
 
@@ -100,10 +85,26 @@ class CombattantController extends Controller {
         $combattant->setDefaite($params['post']['defaite']);
         $combattant->setEgalite($params['post']['egalite']);
         $combattant->setNationalite($params['post']['nationalite']);
+        $combattant->setPhoto($params['post']['photo']);
 
 
         $em->flush();
 
         header('Location: start.php?c=combattant&t=combattantList');
+    }
+
+    public function delete($params) {
+        $id=($params['get']['id']);
+        $em=$params['em'];
+        $combattant=$em->find('Combattant',$id);
+
+        $em->remove($combattant);
+        $em->flush();
+
+        if ($this->isLoggedIn()) {
+            header('Location: start.php?c=combattant&t=combattantList');
+        } else {
+            header('Location: start.php?c=user&t=login');
+        }
     }
 }

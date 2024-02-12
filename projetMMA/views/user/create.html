@@ -26,6 +26,16 @@
         <input type="file" id="avatar" name="avatar" required><br>
 
         <input type="submit" value="Envoyer">
+
+        <p>
+            Déjà un compte ? Connectez-vous <a href="{{ url }}?c=user&t=login">Se connecter</a>
+        </p>
     </form>
+
+    <script>
+        document.querySelector("form").addEventListener("submit", function () {
+            window.location.href = "{{ url }}?c=user&t=login";
+        });
+    </script>
 
 {% endblock %}

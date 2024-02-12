@@ -21,12 +21,6 @@ class ArenaController extends Controller {
     }
 
     public function insert($params) {
-        if (
-            isset($_POST['name']) &&
-            isset($_POST['surname']) &&
-            isset($_POST['age']) &&
-            isset($_FILES['avatar'])
-        ) {
             $em = $params['em'];
             $name = $_POST['name'];
             $city = $_POST['city'];
@@ -44,7 +38,6 @@ class ArenaController extends Controller {
 
             header('Location: start.php?c=arena&t=arenaList');
         }
-    }
 
     public function read($params) {
 
@@ -55,7 +48,7 @@ class ArenaController extends Controller {
         $em = $params["em"];
         $arenas = $em->find('Arena', $id);
 
-        echo $this->twig->render('arena/edit.html', ['arena' => $arenas]);
+        echo $this->twig->render('arena/edit.html', ['arenas' => $arenas]);
     }
 
 
@@ -66,11 +59,26 @@ class ArenaController extends Controller {
         $arena = $em->find('Arena', $id);
 
         $arena->setName($params['post']['name']);
-        $arena->setCity($params['city']['name']);
-        $arena->setPlace($params['place']['name']);
+        $arena->setCity($params['post']['city']);
+        $arena->setPlace($params['post']['place']);
 
         $em->flush();
 
         header('Location: start.php?c=arena&t=arenaList');
+    }
+
+    public function delete($params) {
+        $id=($params['get']['id']);
+        $em=$params['em'];
+        $arena=$em->find('Arena',$id);
+
+        $em->remove($arena);
+        $em->flush();
+
+        if ($this->isLoggedIn()) {
+            header('Location: start.php?c=arena&t=arenaList');
+        } else {
+            header('Location: start.php?c=user&t=login');
+        }
     }
 }

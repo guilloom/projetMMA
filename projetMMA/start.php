@@ -29,7 +29,7 @@ $postParams = isset($_POST) ? $_POST : null;
 
 
 $params = array(array(
-    "url"=>"http://195.154.118.169/guillaume/projetMMA/start.php/",
+    "url"=>"http://195.154.118.169/guillaume/projetMMA/start.php",
     "get"=>$getParams,
     "em"=>$entityManager,
     "post"=>$postParams

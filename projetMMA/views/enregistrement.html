@@ -8,21 +8,25 @@
 </head>
 <body>
     <h2>Formulaire de Connexion</h2>
-    <form action="userController.php" method="post">
+    <form method="post" action="{{ url }}?c=user&t=login">
 
         <label for="mail">Mail:</label>
         <input type="text" id="mail" name="mail" required></br>
 
         <label for="username">Nom d'utilisateur:</label>
-        <input type="text" id="username" name="username" required></br>
-        
+        <input type="text" id="name" name="name" required></br>
+
         <label for="password">Mot de passe:</label>
         <input type="password" id="password" name="password" required></br>
 
         <label for="city">Ville:</label>
         <input type="text" id="city" name="city" required></br>
-        
+
         <input type="submit" value="S'enregistrer">
+
+        <p>
+            Déjà un compte ? Connectez-vous <a href="{{ url }}?c=user&t=login">Se connecter</a>
+        </p>
     </form>
 </body>
 </html>
